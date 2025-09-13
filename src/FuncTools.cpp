@@ -102,8 +102,6 @@ std::string func::infix_to_postfix(const std::string& str) {
 	return postfix; // 遍历结束，转换结束，返回postfix
 }
 
-
-
 // 为运算符定义优先级函数
 int opt::get_precedence(const char& optc) {
 	switch (optc) {
