@@ -1,7 +1,7 @@
 #include <iostream> 
 #include <string> 
 #include <cctype> // 使用了std::isspace
-#include "StaticStack.h"
+#include "StaticStack.hpp"
 #include "FuncTools.h"  
 
 // 问候函数 
@@ -16,26 +16,27 @@ void func::farewell() {
 
 // 括号匹配栈实现 
 bool func::is_compared(const std::string& str) { 
-	 SimpleStack s{}; // 栈初始化 
-	char topElem = '\0'; // 栈顶元素初始化为\0，ASCII中对应的整数为0
+	SimpleStack<char> s{}; // 栈初始化 
 	for (char it : str) { // 遍历str  
 		switch (it) {
 		case '(': // 匹配左括号入栈 
 		case '（': // 更适合中国宝宝体质
-		case '[': 
+		case '[':
 		case '{':
 			s.push(it);
-			break; 
-		case ')': 
+			break;
+		case ')':
 		case '）':
-		case ']': 
-		case '}':  
-			if (s.empty()) return false;
-			topElem = s.pop(); // 出栈，同时获取栈顶元素 
-			if ((topElem == '(' && it != ')') ||
-				(topElem == '[' && it != ']') ||
-				(topElem == '{' && it != '}') || 
-				(topElem == '（' && it != '）'))
+		case ']':
+		case '}':
+			if (s.empty())
+				return false; // 空栈则出栈
+
+			auto tmp = s.pop(); // 出栈，同时获取栈顶元素 
+			if ((*tmp == '(' && it != ')') || // 如果是true 说明有值，进行匹配
+				(*tmp == '[' && it != ']') ||
+				(*tmp == '{' && it != '}') ||
+				(*tmp == '（' && it != '）'))
 				return false;
 		}
 	}
@@ -47,7 +48,7 @@ std::string func::infix_to_postfix(const std::string& str) {
 	if (str.empty())
 		return str; // 直接返回原值 
 
-	SimpleStack stk{}; // 一个栈保存未确定优先级的运算符  
+	SimpleStack<char> stk{}; // 一个栈保存未确定优先级的运算符  
 	std::string postfix{}; // 初始化一个后缀表达式
 	
 	for (const auto& it : str) { // 遍历str(主遍历、最外层遍历) 
@@ -67,8 +68,8 @@ std::string func::infix_to_postfix(const std::string& str) {
 			
 			// length一定不为零，安全取栈顶，把确定运算顺序的符号依次加入到postfix中 
 			// 如果遇到(，保留(于栈中，栈非空；如果栈空后续if报错。
-			while (stk.size() > 0 && stk.peek() != '(') {
-				postfix += stk.pop(); // 加入后缀 
+			while (stk.size() > 0 && *(stk.peek()) != '(') {
+				postfix += *(stk.pop()); // 加入后缀 
 			}
 			 
 			if (stk.size() == 0) // 如果栈空了直接非法数据返回
@@ -80,10 +81,10 @@ std::string func::infix_to_postfix(const std::string& str) {
 
 		int precedence = opt::get_precedence(it); // 获取运算符优先级，-1表示非运算符，也非界限符
 		if (precedence != -1) { // 如果遇到运算符 
-			while (stk.size() > 0 && stk.peek() != '(') { // 遇到左括号或栈空停下 
-				int top_precedence = opt::get_precedence(stk.peek()); // 缓存栈顶运算符的优先级
+			while (stk.size() > 0 && *(stk.peek()) != '(') { // 遇到左括号或栈空停下 
+				int top_precedence = opt::get_precedence(*(stk.peek())); // 缓存栈顶运算符的优先级                        
 				if (top_precedence >= precedence) // 如果栈顶符号优先级大于等于本运算符it 
-					postfix += stk.pop(); // 出栈并加入后缀
+					postfix += *(stk.pop()); // 出栈并加入后缀
 				else
 					break;
 			}
@@ -94,7 +95,7 @@ std::string func::infix_to_postfix(const std::string& str) {
 	} 
 
 	while (stk.size() > 0) { // 处理栈中剩余的运算符 
-		char top = stk.pop(); // 取栈顶
+		char top = *(stk.pop()); // 取栈顶
 		if (top != '(' && top != ')') {
 			postfix += top; 
 		}

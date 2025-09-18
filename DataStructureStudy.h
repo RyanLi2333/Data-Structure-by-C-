@@ -4,6 +4,7 @@
 #pragma once 
 #include <iostream> 
 #include <string>
-#include "LinkList.h" 
+#include "LinkList.hpp" 
+#include "StaticStack.hpp"
 #include "FuncTools.h" 
 // TODO: 在此处引用程序需要的其他标头。

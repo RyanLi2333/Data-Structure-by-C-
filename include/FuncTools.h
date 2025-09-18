@@ -3,6 +3,7 @@
 #include <vector> 
 #include <utility> // std::swap调用 
 #include <cstddef> // size_t使用 
+#include "StaticStack.hpp"
 inline const std::string& ERR_REMINDER = "ERROR"; 
 /// 工具函数库，一些基于某些数据结构的算法实现
 

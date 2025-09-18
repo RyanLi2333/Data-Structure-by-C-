@@ -18,10 +18,8 @@ set(CMAKE_CXX_EXTENSIONS OFF) # 禁用编译器拓展(如GNU拓展)，保证兼�
 add_executable (
 	DataStructureStudy
 	DataStructureStudy.cpp
-	DataStructureStudy.h
-	"src/LinkList.cpp" 
-	"include/LinkList.h"
- "include/FuncTools.h" "src/FuncTools.cpp" "include/StaticStack.h" "src/StaticStack.cpp") 
+	"src/FuncTools.cpp"
+	) 
 
 SET(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include") # 设置变量INCLUDE_DIR
 
