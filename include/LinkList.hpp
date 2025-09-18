@@ -25,25 +25,25 @@ private:
 	LinkNode<ElemType>* m_head; // 头节点
 	size_t m_length; // 链表长度 
 public:
-	LinkList(); // 空构造 
-	~LinkList(); // 析构 
+	explicit LinkList(); // 空构造 
+	~LinkList() noexcept; // 析构 
 	bool clear(); // 清空链表内容 
-	size_t size() const; // 获取链表元素个数 
 	void print() const; // 打印双向循环链表  
-	bool empty() const; // 空链判断 
+	size_t size() const noexcept; // 获取链表元素个数 
+	bool empty() const noexcept; // 空链判断 
 };
 
 // 具体实现
 /// 链表数据结构实现 
 template<typename ElemType>
-LinkNode<ElemType>::LinkNode() : m_next(nullptr), m_prior(nullptr), m_data() {} // 初始化节点  
+LinkNode<ElemType>::LinkNode() : m_next{nullptr}, m_prior{nullptr}, m_data{} {} // 初始化节点  
 template<typename ElemType>
-LinkNode<ElemType>::~LinkNode() = default; // 显式请求空构造
+LinkNode<ElemType>::~LinkNode() noexcept = default; // 显式请求空构造
 
 /// 带头结点的链表实现 
  // 空构造
 template<typename ElemType>
-LinkList<ElemType>::LinkList() : m_head(new LinkNode<ElemType>()), m_length(0) {
+LinkList<ElemType>::LinkList() : m_head{new LinkNode<ElemType>()}, m_length{0} {
 	m_head->m_prior = m_head->m_next = m_head; // 初始化节点
 }
 
@@ -59,7 +59,7 @@ LinkList<ElemType>::~LinkList() {
 
 // 返回链表的长度 
 template<typename ElemType>
-size_t LinkList<ElemType>::size() const {
+size_t LinkList<ElemType>::size() const noexcept {
 	return m_length; // 返回链表长度
 }
 
@@ -100,6 +100,6 @@ void LinkList<ElemType>::print() const {
 
 // 链表空判断  
 template<typename ElemType>
-bool LinkList<ElemType>::empty() const {
+bool LinkList<ElemType>::empty() const noexcept {
 	return m_length == 0; // 判空
 }
